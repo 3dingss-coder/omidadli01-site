@@ -1,0 +1,13 @@
+name = "orange-wildflower-903e"
+main = "worker.js"
+compatibility_date = "2026-08-01"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "omidadli01-site-db"
+database_id = "89b0d5f8-7ded-4dc8-9f52-79befd0abbec"
