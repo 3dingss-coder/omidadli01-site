@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://omidadli01.site/sitemap.xml
