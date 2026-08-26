@@ -102,22 +102,12 @@ async function startServer() {
   // GET /api/content
   app.get('/api/content', (req, res) => {
     const content = getStoredContent();
+    res.set('Cache-Control', 'no-store');
     res.json(content);
   });
 
   // POST /api/content
-  app.post('/api/content', (req, res) => {
-    // Check if authorization provided
-    const authHeader = req.headers.authorization || '';
-    const token = authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
-    if (token) {
-      const expiry = activeSessions.get(token);
-      if (expiry && expiry >= Date.now()) {
-        setStoredContent(req.body);
-        return res.json({ ok: true });
-      }
-    }
-    // Also allow direct saving for local updates
+  app.post('/api/content', requireAuth, (req, res) => {
     setStoredContent(req.body);
     res.json({ ok: true });
   });

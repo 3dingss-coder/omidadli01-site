@@ -12,6 +12,16 @@
 
 const DEFAULT_PIN = '1234';
 const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
+const ALLOWED_ORIGINS = ['https://omidadli01.site', 'https://www.omidadli01.site'];
+
+function corsOriginFor(request) {
+  const origin = request.headers.get('Origin');
+  if (origin && ALLOWED_ORIGINS.includes(origin)) return origin;
+  // Non-browser or same-origin requests (no Origin header) and local/dev origins
+  // fall back to '*' for the public read-only GET /api/content endpoint only;
+  // mutating routes always check the Authorization/session token regardless.
+  return origin || '*';
+}
 
 async function ensureSchema(db) {
   await db.batch([
@@ -92,12 +102,13 @@ function newToken() {
   return crypto.randomUUID().replace(/-/g, '') + crypto.randomUUID().replace(/-/g, '');
 }
 
-function json(data, init) {
+function json(data, init, corsOrigin) {
   return new Response(JSON.stringify(data), {
     ...init,
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Origin': corsOrigin || '*',
+      Vary: 'Origin',
       ...(init && init.headers),
     },
   });
@@ -123,9 +134,13 @@ async function cleanupExpiredSessions(db) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    const corsOrigin = corsOriginFor(request);
+    // Wrapper so every response in this request automatically carries the
+    // correct Access-Control-Allow-Origin without repeating it at each call site.
+    const respond = (data, init) => json(data, init, corsOrigin);
 
     if (request.method === 'OPTIONS' && url.pathname.startsWith('/api/')) {
-      return json({}, {
+      return respond({}, {
         status: 204,
         headers: {
           'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
@@ -137,7 +152,7 @@ export default {
     if (url.pathname.startsWith('/api/')) {
       const db = env.DB;
       if (!db) {
-        return json(
+        return respond(
           { error: 'D1 Database binding (DB) is missing. Check wrangler.toml configuration.' },
           { status: 500 }
         );
@@ -145,30 +160,32 @@ export default {
       try {
         await ensureSchema(db);
       } catch (e) {
-        return json({ error: 'Database schema error', details: String((e && e.message) || e) }, { status: 500 });
+        console.error('Database schema error:', e);
+        return respond({ error: 'Database schema error' }, { status: 500 });
       }
 
       try {
       // --- GET /api/content ---
       if (url.pathname === '/api/content' && request.method === 'GET') {
         const row = await db.prepare('SELECT content_json FROM site_content WHERE id = 1').first();
-        if (!row) return json({});
+        const noStore = { headers: { 'Cache-Control': 'no-store' } };
+        if (!row) return respond({}, noStore);
         try {
-          return json(JSON.parse(row.content_json));
+          return respond(JSON.parse(row.content_json), noStore);
         } catch (e) {
-          return json({ error: 'Corrupt content in database' }, { status: 500 });
+          return respond({ error: 'Corrupt content in database' }, { status: 500, ...noStore });
         }
       }
 
       // --- POST /api/content ---
       if (url.pathname === '/api/content' && request.method === 'POST') {
         const ok = await requireSession(request, db);
-        if (!ok) return json({ error: 'Unauthorized' }, { status: 401 });
+        if (!ok) return respond({ error: 'Unauthorized' }, { status: 401 });
         let body;
         try {
           body = await request.json();
         } catch (e) {
-          return json({ error: 'Invalid JSON body' }, { status: 400 });
+          return respond({ error: 'Invalid JSON body' }, { status: 400 });
         }
         await db
           .prepare(
@@ -177,7 +194,7 @@ export default {
           )
           .bind(JSON.stringify(body), Date.now())
           .run();
-        return json({ ok: true });
+        return respond({ ok: true });
       }
 
       // --- POST /api/auth/login ---
@@ -186,13 +203,13 @@ export default {
         try {
           body = await request.json();
         } catch (e) {
-          return json({ error: 'Invalid JSON body' }, { status: 400 });
+          return respond({ error: 'Invalid JSON body' }, { status: 400 });
         }
         const pin = (body && body.pin) || '';
         const row = await db.prepare('SELECT pin_hash FROM admin_auth WHERE id = 1').first();
         const hash = await sha256(pin);
         if (!row || row.pin_hash !== hash) {
-          return json({ error: 'Invalid pin' }, { status: 401 });
+          return respond({ error: 'Invalid pin' }, { status: 401 });
         }
         await cleanupExpiredSessions(db);
         const token = newToken();
@@ -200,22 +217,22 @@ export default {
           .prepare('INSERT INTO admin_sessions (token, created_at, expires_at) VALUES (?, ?, ?)')
           .bind(token, Date.now(), Date.now() + SESSION_TTL_MS)
           .run();
-        return json({ token });
+        return respond({ token });
       }
 
       // --- POST /api/auth/set-pin ---
       if (url.pathname === '/api/auth/set-pin' && request.method === 'POST') {
         const ok = await requireSession(request, db);
-        if (!ok) return json({ error: 'Unauthorized' }, { status: 401 });
+        if (!ok) return respond({ error: 'Unauthorized' }, { status: 401 });
         let body;
         try {
           body = await request.json();
         } catch (e) {
-          return json({ error: 'Invalid JSON body' }, { status: 400 });
+          return respond({ error: 'Invalid JSON body' }, { status: 400 });
         }
         const newPin = (body && body.pin) || '';
         if (!newPin || newPin.length < 4) {
-          return json({ error: 'Pin must be at least 4 characters' }, { status: 400 });
+          return respond({ error: 'Pin must be at least 4 characters' }, { status: 400 });
         }
         const hash = await sha256(newPin);
         await db
@@ -225,7 +242,7 @@ export default {
           )
           .bind(hash, Date.now())
           .run();
-        return json({ ok: true });
+        return respond({ ok: true });
       }
 
       // --- POST /api/auth/logout ---
@@ -233,12 +250,13 @@ export default {
         const auth = request.headers.get('Authorization') || '';
         const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
         if (token) await db.prepare('DELETE FROM admin_sessions WHERE token = ?').bind(token).run();
-        return json({ ok: true });
+        return respond({ ok: true });
       }
 
-      return json({ error: 'Not found' }, { status: 404 });
+      return respond({ error: 'Not found' }, { status: 404 });
       } catch (e) {
-        return json({ error: 'API error', details: String((e && e.message) || e) }, { status: 500 });
+        console.error('API error:', e);
+        return respond({ error: 'API error' }, { status: 500 });
       }
     }
 
