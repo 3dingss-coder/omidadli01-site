@@ -51,8 +51,8 @@ export const defaultGlobalSeo: GlobalSeoConfig = {
   defaultKeywords: 'پرفورمنس مارکتینگ, CRO, دیجیتال مارکتینگ, گوگل ادز, امید عدلی, بهینه‌سازی نرخ تبدیل',
   faviconUrl: '/favicon.ico',
   ogImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80',
-  canonicalBaseUrl: 'https://omidadli.com',
-  robotsTxt: 'User-agent: *\nAllow: /\nSitemap: https://omidadli.com/sitemap.xml',
+  canonicalBaseUrl: 'https://omidadli01.site',
+  robotsTxt: 'User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: https://omidadli01.site/sitemap.xml',
 };
 
 export const defaultNavigationMenu: NavigationMenuItem[] = [
@@ -844,7 +844,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const generateSitemapXml = () => {
-    const baseUrl = data.GLOBAL_SEO.canonicalBaseUrl || 'https://omidadli.com';
+    const baseUrl = data.GLOBAL_SEO.canonicalBaseUrl || 'https://omidadli01.site';
     const pages = ['/', '/services', '/portfolio', '/about', '/projects', '/blog', '/products', '/contact'];
     
     (data.CUSTOM_PAGES || []).forEach((cp) => {
@@ -861,7 +861,7 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const generateRobotsTxt = () => {
-    return data.GLOBAL_SEO.robotsTxt || 'User-agent: *\nAllow: /\nSitemap: https://omidadli.com/sitemap.xml';
+    return data.GLOBAL_SEO.robotsTxt || 'User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: https://omidadli01.site/sitemap.xml';
   };
 
   const addBlogComment = (comment: { postId: string; authorName: string; authorEmail: string; content: string }) => {
