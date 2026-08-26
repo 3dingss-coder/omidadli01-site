@@ -11,3 +11,11 @@ not_found_handling = "single-page-application"
 binding = "DB"
 database_name = "omidadli01-site-db"
 database_id = "89b0d5f8-7ded-4dc8-9f52-79befd0abbec"
+
+# Sends contact-form submissions to your inbox via Cloudflare Email Routing.
+# Requires Email Routing to be enabled for omidadli01.site and
+# omidadli78@gmail.com to be a verified destination address in the
+# Cloudflare dashboard (Email > Email Routing > Destination addresses).
+[[send_email]]
+name = "CONTACT_EMAIL"
+destination_address = "omidadli78@gmail.com"

@@ -8,6 +8,7 @@ const PORT = 3000;
 const DATA_DIR = path.join(process.cwd(), 'data');
 const CONTENT_FILE = path.join(DATA_DIR, 'content.json');
 const AUTH_FILE = path.join(DATA_DIR, 'auth.json');
+const CONTACT_FILE = path.join(DATA_DIR, 'contact-submissions.json');
 const DEFAULT_PIN = '1234';
 const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
@@ -68,6 +69,20 @@ function getStoredContent(): any {
 function setStoredContent(content: any) {
   ensureDataStore();
   fs.writeFileSync(CONTENT_FILE, JSON.stringify(content, null, 2), 'utf-8');
+}
+
+function appendContactSubmission(entry: any) {
+  ensureDataStore();
+  let list: any[] = [];
+  try {
+    if (fs.existsSync(CONTACT_FILE)) {
+      list = JSON.parse(fs.readFileSync(CONTACT_FILE, 'utf-8'));
+    }
+  } catch (e) {
+    console.error('Error reading contact submissions file:', e);
+  }
+  list.push(entry);
+  fs.writeFileSync(CONTACT_FILE, JSON.stringify(list, null, 2), 'utf-8');
 }
 
 function generateToken(): string {
@@ -145,6 +160,26 @@ async function startServer() {
       activeSessions.delete(token);
     }
     res.json({ ok: true });
+  });
+
+  // POST /api/contact
+  // Local dev has no Cloudflare Email Routing binding, so submissions are
+  // just stored to data/contact-submissions.json (email sending only
+  // happens in the deployed Worker, see worker.js).
+  app.post('/api/contact', (req, res) => {
+    const { name, contact, serviceNeeded, details } = req.body || {};
+    if (!name || !contact) {
+      return res.status(400).json({ error: 'نام و اطلاعات تماس الزامی است' });
+    }
+    appendContactSubmission({
+      name: String(name).slice(0, 200),
+      contact: String(contact).slice(0, 200),
+      serviceNeeded: String(serviceNeeded || '').slice(0, 200),
+      details: String(details || '').slice(0, 5000),
+      createdAt: Date.now(),
+    });
+    console.log(`[dev] Contact form submission stored (email not sent in local dev): ${name} <${contact}>`);
+    res.json({ ok: true, emailSent: false });
   });
 
   // Vite Middleware or Static Production Serving

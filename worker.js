@@ -6,9 +6,14 @@
 //     POST /api/auth/login     -> { pin } -> { token } on success
 //     POST /api/auth/set-pin   -> { pin } -> change the admin pin (requires a valid session token)
 //     POST /api/auth/logout    -> invalidate the current session token
+//     POST /api/contact        -> { name, contact, serviceNeeded?, details? } -> stores the
+//                                  submission in D1 and emails it via Cloudflare Email Routing
 //
 // The schema is self-healing: on first request it creates the tables if they
 // don't exist yet, and seeds a default pin (1234) if admin_auth is empty.
+
+import { EmailMessage } from 'cloudflare:email';
+import { createMimeMessage } from 'mimetext/browser';
 
 const DEFAULT_PIN = '1234';
 const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
@@ -40,6 +45,15 @@ async function ensureSchema(db) {
       created_at INTEGER NOT NULL,
       expires_at INTEGER NOT NULL
     )`),
+    db.prepare(`CREATE TABLE IF NOT EXISTS contact_submissions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      name TEXT NOT NULL,
+      contact TEXT NOT NULL,
+      service_needed TEXT,
+      details TEXT,
+      email_sent INTEGER NOT NULL DEFAULT 0,
+      created_at INTEGER NOT NULL
+    )`),
   ]);
 
   // Defensive migration: these tables may already exist from an older/different
@@ -51,6 +65,7 @@ async function ensureSchema(db) {
     { name: 'site_content', requiredCols: ['id', 'content_json', 'updated_at'] },
     { name: 'admin_auth', requiredCols: ['id', 'pin_hash', 'updated_at'] },
     { name: 'admin_sessions', requiredCols: ['token', 'created_at', 'expires_at'] },
+    { name: 'contact_submissions', requiredCols: ['id', 'name', 'contact', 'service_needed', 'details', 'email_sent', 'created_at'] },
   ];
   for (const t of tables) {
     const info = await db.prepare(`PRAGMA table_info(${t.name})`).all();
@@ -74,6 +89,20 @@ async function ensureSchema(db) {
         await db
           .prepare(
             `CREATE TABLE admin_sessions (token TEXT PRIMARY KEY, created_at INTEGER NOT NULL, expires_at INTEGER NOT NULL)`
+          )
+          .run();
+      } else if (t.name === 'contact_submissions') {
+        await db
+          .prepare(
+            `CREATE TABLE contact_submissions (
+              id INTEGER PRIMARY KEY AUTOINCREMENT,
+              name TEXT NOT NULL,
+              contact TEXT NOT NULL,
+              service_needed TEXT,
+              details TEXT,
+              email_sent INTEGER NOT NULL DEFAULT 0,
+              created_at INTEGER NOT NULL
+            )`
           )
           .run();
       }
@@ -129,6 +158,39 @@ async function requireSession(request, db) {
 
 async function cleanupExpiredSessions(db) {
   await db.prepare('DELETE FROM admin_sessions WHERE expires_at < ?').bind(Date.now()).run();
+}
+
+function escapeHtml(str) {
+  return String(str || '').replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+  }[c]));
+}
+
+async function sendContactEmail(env, submission) {
+  const binding = env.CONTACT_EMAIL;
+  if (!binding) {
+    // send_email binding not configured (e.g. local/dev) — caller falls back
+    // to "stored but not emailed".
+    return false;
+  }
+  const msg = createMimeMessage();
+  msg.setSender({ name: 'فرم تماس omidadli01.site', addr: 'contact@omidadli01.site' });
+  msg.setRecipient('omidadli78@gmail.com');
+  msg.setSubject(`پیام جدید از فرم تماس: ${submission.name}`);
+  msg.addMessage({
+    contentType: 'text/html',
+    data: `
+      <div dir="rtl" style="font-family: sans-serif; line-height: 1.8;">
+        <p><strong>نام:</strong> ${escapeHtml(submission.name)}</p>
+        <p><strong>ایمیل/تماس:</strong> ${escapeHtml(submission.contact)}</p>
+        <p><strong>مرحله کسب‌وکار:</strong> ${escapeHtml(submission.serviceNeeded)}</p>
+        <p><strong>توضیحات:</strong><br/>${escapeHtml(submission.details).replace(/\n/g, '<br/>')}</p>
+      </div>
+    `,
+  });
+  const message = new EmailMessage('contact@omidadli01.site', 'omidadli78@gmail.com', msg.asRaw());
+  await binding.send(message);
+  return true;
 }
 
 export default {
@@ -251,6 +313,47 @@ export default {
         const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
         if (token) await db.prepare('DELETE FROM admin_sessions WHERE token = ?').bind(token).run();
         return respond({ ok: true });
+      }
+
+      // --- POST /api/contact ---
+      if (url.pathname === '/api/contact' && request.method === 'POST') {
+        let body;
+        try {
+          body = await request.json();
+        } catch (e) {
+          return respond({ error: 'Invalid JSON body' }, { status: 400 });
+        }
+        const name = String((body && body.name) || '').trim();
+        const contact = String((body && body.contact) || '').trim();
+        const serviceNeeded = String((body && body.serviceNeeded) || '').trim();
+        const details = String((body && body.details) || '').trim();
+
+        if (!name || !contact) {
+          return respond({ error: 'نام و اطلاعات تماس الزامی است' }, { status: 400 });
+        }
+        // Basic sanity limits to avoid abuse via huge payloads.
+        if (name.length > 200 || contact.length > 200 || details.length > 5000) {
+          return respond({ error: 'ورودی بیش از حد طولانی است' }, { status: 400 });
+        }
+
+        const submission = { name, contact, serviceNeeded, details };
+        let emailSent = false;
+        try {
+          emailSent = await sendContactEmail(env, submission);
+        } catch (e) {
+          console.error('Failed to send contact email:', e);
+          emailSent = false;
+        }
+
+        await db
+          .prepare(
+            `INSERT INTO contact_submissions (name, contact, service_needed, details, email_sent, created_at)
+             VALUES (?, ?, ?, ?, ?, ?)`
+          )
+          .bind(name, contact, serviceNeeded, details, emailSent ? 1 : 0, Date.now())
+          .run();
+
+        return respond({ ok: true, emailSent });
       }
 
       return respond({ error: 'Not found' }, { status: 404 });

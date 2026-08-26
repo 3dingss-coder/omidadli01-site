@@ -19,6 +19,8 @@ export const ContactPage: React.FC<ContactPageProps> = ({ theme, onNavigate }) =
 
   const [activeTab, setActiveTab] = useState<'form' | 'calendar'>('form');
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,9 +30,32 @@ export const ContactPage: React.FC<ContactPageProps> = ({ theme, onNavigate }) =
     details: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (isSubmitting) return;
+    setSubmitError(null);
+    setIsSubmitting(true);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          contact: formData.email,
+          serviceNeeded: formData.serviceNeeded,
+          details: formData.details,
+        }),
+      });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || 'ارسال پیام با خطا مواجه شد');
+      }
+      setSubmitted(true);
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : 'ارسال پیام با خطا مواجه شد. لطفاً دوباره تلاش کنید.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -342,11 +367,16 @@ export const ContactPage: React.FC<ContactPageProps> = ({ theme, onNavigate }) =
 
                   <button
                     type="submit"
-                    className="w-full glow-btn py-4 rounded-2xl text-xs font-bold text-white flex items-center justify-center gap-2 cursor-pointer shadow-xl transition-transform hover:scale-[1.01]"
+                    disabled={isSubmitting}
+                    className="w-full glow-btn py-4 rounded-2xl text-xs font-bold text-white flex items-center justify-center gap-2 cursor-pointer shadow-xl transition-transform hover:scale-[1.01] disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
-                    <span>ارسال پیام و شروع گفتگو</span>
+                    <span>{isSubmitting ? 'در حال ارسال...' : 'ارسال پیام و شروع گفتگو'}</span>
                     <ArrowUpLeft className="w-4 h-4" />
                   </button>
+
+                  {submitError && (
+                    <p className="text-xs font-bold text-rose-400 text-center">{submitError}</p>
+                  )}
                 </form>
               )}
             </div>
