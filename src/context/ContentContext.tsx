@@ -50,7 +50,7 @@ export const defaultGlobalSeo: GlobalSeoConfig = {
   defaultMetaDesc: 'خدمات تخصصی پرفورمنس مارکتینگ، بهینه‌سازی نرخ تبدیل (CRO)، کمپین‌های گوگل ادز و آنالیز پیشرفته رفتار کاربر.',
   defaultKeywords: 'پرفورمنس مارکتینگ, CRO, دیجیتال مارکتینگ, گوگل ادز, امید عدلی, بهینه‌سازی نرخ تبدیل',
   faviconUrl: '/favicon.ico',
-  ogImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80',
+  ogImage: '/profile-photo-web.jpg',
   canonicalBaseUrl: 'https://omidadli01.site',
   robotsTxt: 'User-agent: *\nAllow: /\nDisallow: /admin\nSitemap: https://omidadli01.site/sitemap.xml',
 };
