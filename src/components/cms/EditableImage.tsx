@@ -27,7 +27,16 @@ export const EditableImage: React.FC<EditableImageProps> = ({
   const currentValue = getByPath(data, path) || src || defaultSrc || fallbackSrc;
 
   if (!isAdmin) {
-    return <img src={currentValue} alt={alt} className={className} referrerPolicy="no-referrer" />;
+    return (
+      <img
+        src={currentValue}
+        alt={alt}
+        className={className}
+        referrerPolicy="no-referrer"
+        loading="lazy"
+        decoding="async"
+      />
+    );
   }
 
   const handleSelectImage = (newUrl: string) => {
@@ -36,7 +45,14 @@ export const EditableImage: React.FC<EditableImageProps> = ({
 
   return (
     <div className="relative group/img inline-block overflow-visible">
-      <img src={currentValue} alt={alt} className={className} referrerPolicy="no-referrer" />
+      <img
+        src={currentValue}
+        alt={alt}
+        className={className}
+        referrerPolicy="no-referrer"
+        loading="lazy"
+        decoding="async"
+      />
 
       <button
         type="button"
