@@ -65,7 +65,7 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({ isOpen, onClos
                   setPin(e.target.value);
                   setError(false);
                 }}
-                placeholder="رمز عبور پیش‌فرض: 1234"
+                placeholder="رمز عبور / پین کد"
                 className="w-full bg-[#050214] border-2 border-white/20 focus:border-[#5ce1e6] rounded-2xl px-4 py-3 text-center tracking-widest text-lg text-white focus:outline-none transition-colors"
                 autoFocus
               />
@@ -74,7 +74,7 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({ isOpen, onClos
             {error && (
               <p className="text-xs text-rose-400 font-bold mt-2 flex items-center gap-1">
                 <ShieldAlert className="w-4 h-4" />
-                <span>رمز عبور اشتباه است (پین کد پیش‌فرض: 1234)</span>
+                <span>رمز عبور اشتباه است</span>
               </p>
             )}
           </div>
@@ -96,10 +96,6 @@ export const AdminLoginModal: React.FC<AdminLoginModalProps> = ({ isOpen, onClos
             </button>
           </div>
         </form>
-
-        <p className="text-[11px] text-center text-slate-400 border-t border-white/10 pt-3">
-          💡 رمز عبور پیش‌فرض ادمین: <code className="bg-white/10 px-1.5 py-0.5 rounded text-amber-300 font-mono">1234</code>
-        </p>
       </div>
     </div>
   );

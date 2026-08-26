@@ -205,7 +205,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
             </div>
             <h1 className="text-2xl font-black gradient-text">ورود به سیستم مدیریت وب‌سایت (CMS)</h1>
             <p className="text-xs text-slate-300">
-              لطفاً پین‌کد مدیریتی را وارد کنید (پین‌کد پیش‌فرض: <code className="bg-amber-400/20 text-amber-300 px-2 py-0.5 rounded font-mono font-bold">1234</code>)
+              لطفاً پین‌کد مدیریتی را وارد کنید
             </p>
           </div>
 
@@ -227,7 +227,7 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
 
             {loginError && (
               <div className="p-3 rounded-xl bg-rose-500/20 border border-rose-500/50 text-rose-300 text-xs font-bold text-center animate-bounce">
-                پین‌کد وارد شده اشتباه است. پین‌کد پیش‌فرض 1234 می‌باشد.
+                پین‌کد وارد شده اشتباه است.
               </div>
             )}
 
