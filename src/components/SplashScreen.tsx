@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/content';
 
 interface SplashScreenProps {
@@ -223,8 +222,7 @@ export const SplashScreen: React.FC<SplashScreenProps> = ({
               <h1 className="text-2xl sm:text-3xl font-black tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-white via-[#5ce1e6] to-[#4c8dff]">
                 {PERSONAL_INFO.name}
               </h1>
-              <div className="flex items-center justify-center gap-2 text-xs text-cyan-300/80 font-medium tracking-widest dir-rtl">
-                <Sparkles className="w-3.5 h-3.5 text-[#5ce1e6] animate-spin" style={{ animationDuration: '4s' }} />
+              <div className="flex items-center justify-center text-xs text-cyan-300/80 font-medium tracking-widest dir-rtl">
                 <span>تحلیلگر داده & بهینه‌ساز کسب‌وکار</span>
               </div>
             </motion.div>

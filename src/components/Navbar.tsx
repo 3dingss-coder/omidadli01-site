@@ -53,14 +53,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#5ce1e6] animate-pulse" />
           </div>
 
-          <div>
-            <div className={`font-black text-base sm:text-lg leading-tight ${isDark ? 'text-white' : 'text-[#1a1240]'}`}>
-              {data.PERSONAL_INFO?.name || 'امید عدلی'}
+            <div>
+              <div className={`font-black text-base sm:text-lg leading-tight ${isDark ? 'text-white' : 'text-[#1a1240]'}`}>
+                {data.PERSONAL_INFO?.name || 'امید عدلی'}
+              </div>
+              <div className="text-[11px] font-medium text-slate-400">
+                {data.PERSONAL_INFO?.title || 'متخصص دیجیتال مارکتینگ'}
+              </div>
             </div>
-            <div className="text-[11px] font-medium text-slate-400">
-              {data.PERSONAL_INFO?.title || 'متخصص دیجیتال مارکتینگ و بهینه‌سازی نرخ تبدیل'}
-            </div>
-          </div>
         </button>
 
         {/* Desktop Navigation Links */}

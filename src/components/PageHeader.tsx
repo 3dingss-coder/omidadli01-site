@@ -1,6 +1,6 @@
 import React from 'react';
 import { Theme, Page } from '../types';
-import { ChevronLeft, Home, Sparkles } from 'lucide-react';
+import { ChevronLeft, Home } from 'lucide-react';
 import { motion } from 'motion/react';
 
 interface PageHeaderProps {
@@ -65,9 +65,8 @@ export const PageHeader: React.FC<PageHeaderProps> = ({
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#5ce1e6]/15 border border-[#5ce1e6]/30 text-[11px] font-bold text-[#5ce1e6] whitespace-nowrap"
+              className="inline-flex items-center px-3 py-1 rounded-full bg-[#5ce1e6]/15 border border-[#5ce1e6]/30 text-[11px] font-bold text-[#5ce1e6] whitespace-nowrap"
             >
-              <Sparkles className="w-3.5 h-3.5 animate-pulse" />
               <span>{badgeText}</span>
             </motion.div>
           )}

@@ -11,7 +11,6 @@ import { TiltCard } from '../components/3D/TiltCard';
 import { 
   ChevronLeft, 
   ArrowUpLeft, 
-  Sparkles, 
   Target, 
   Rocket, 
   TrendingUp, 
@@ -69,7 +68,7 @@ export const HomePage: React.FC<HomePageProps> = ({ theme, onNavigate, onSelectC
       title: 'تازه می‌خوام شروع کنم',
       desc: 'هنوز سایت یا پیج فعالی ندارم، یا تازه راه افتادم و نمی‌دونم از کجا شروع کنم.',
       cta: 'ببین از کجا شروع کنیم',
-      iconName: 'sparkles',
+      iconName: 'layers',
       glow: 'rgba(139, 92, 246, 0.25)',
       accentBg: 'from-violet-500/20 to-purple-500/10',
       accentBorder: 'border-violet-500/30',
@@ -109,7 +108,7 @@ export const HomePage: React.FC<HomePageProps> = ({ theme, onNavigate, onSelectC
       tagline: 'هنوز آنلاین شروع نکرده‌اید؟ از صفر کنارتان هستم.',
       serviceIds: ['web-app-design', 'ui-ux-design', 'social-media-strategy'],
       ctaText: 'ببینیم دقیقاً چی نیاز داری',
-      icon: Sparkles
+      icon: Layers
     },
     sell: {
       label: 'بهتر بفروشیم',
@@ -198,13 +197,12 @@ export const HomePage: React.FC<HomePageProps> = ({ theme, onNavigate, onSelectC
                 className="lg:col-span-7 text-right space-y-6"
               >
                 {/* Eyebrow */}
-                <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8b5cf6]/10 border border-[#8b5cf6]/30 text-xs font-black text-[#a78bfa] shadow-sm">
-                  <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+                <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#8b5cf6]/10 border border-[#8b5cf6]/30 text-xs font-black text-[#a78bfa] shadow-sm">
                   <span>برای فروشگاه‌ها و کسب‌وکارهای فروش‌محور</span>
                 </div>
 
                 {/* Headline (H1) */}
-                <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-black leading-[1.25] tracking-tight ${
+                <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-black leading-[1.6] ${
                   isDark ? 'text-white' : 'text-[#1a1240]'
                 }`}>
                   فروشگاهتان را آنلاین شروع کنید،{' '}
@@ -215,14 +213,6 @@ export const HomePage: React.FC<HomePageProps> = ({ theme, onNavigate, onSelectC
                 <p className={`text-sm sm:text-base leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                   فرقی نمی‌کنه تازه می‌خواید وارد دنیای آنلاین بشید یا همین حالا فروشگاه و سایت دارید؛ از طراحی سایت و راه‌اندازی پیج و محتوا تا تبلیغات، تحلیل و افزایش فروش، کمکتون می‌کنم مسیر درست رشدتون رو پیدا کنید و اجراش کنید.
                 </p>
-
-                {/* Intro statement */}
-                <div className={`p-4 rounded-2xl border text-xs sm:text-sm leading-relaxed ${
-                  isDark ? 'bg-white/5 border-white/10 text-slate-300' : 'bg-slate-50 border-slate-200 text-slate-700'
-                }`}>
-                  <span className="font-bold text-[#5ce1e6] ml-1">من امید عدلی هستم؛</span>
-                  متخصص رشد دیجیتال برای فروشگاه‌ها. کمک می‌کنم بفهمید مشتری‌ها کجا شما را پیدا می‌کنند، چرا بعضی‌ها خرید می‌کنند و بعضی‌ها نه، و برای بهتر شدن فروش باید دقیقاً روی چه چیزی کار کنید.
-                </div>
 
                 {/* CTAs */}
                 <div className="flex flex-wrap items-center gap-4 pt-2">
@@ -263,7 +253,11 @@ export const HomePage: React.FC<HomePageProps> = ({ theme, onNavigate, onSelectC
                 transition={{ duration: 1.1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
                 className="lg:col-span-5"
               >
-                <IsometricDashboard theme={theme} />
+                <IsometricDashboard 
+                  theme={theme} 
+                  onSelectCaseStudy={onSelectCaseStudy}
+                  onNavigate={onNavigate}
+                />
               </motion.div>
             </div>
           </CinematicSection>

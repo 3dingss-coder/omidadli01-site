@@ -46,7 +46,7 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ theme = 'dark', onNa
           />
         </div>
 
-        <h1 className={`text-3xl md:text-5xl font-bold tracking-tight leading-tight ${isDark ? 'text-slate-100' : 'text-[#1a1240]'}`}>
+        <h1 className={`text-3xl md:text-5xl font-bold leading-tight ${isDark ? 'text-slate-100' : 'text-[#1a1240]'}`}>
           <EditableText 
             path="PROJECTS_PAGE_DATA.headline" 
             defaultValue={projectsData.headline} 

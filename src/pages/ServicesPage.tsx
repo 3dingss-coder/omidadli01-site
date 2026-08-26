@@ -6,7 +6,7 @@ import { IconBadge3D } from '../components/3D/3DIconBadge';
 import { PageHeader } from '../components/PageHeader';
 import { FAQSection } from '../components/FAQSection';
 import { CinematicSection, CinematicStagger, CinematicItem } from '../components/motion/CinematicSection';
-import { CheckCircle2, ArrowUpLeft, Sparkles, Target, Rocket, MessageCircle, HelpCircle, Layers } from 'lucide-react';
+import { CheckCircle2, ArrowUpLeft, Target, Rocket, MessageCircle, HelpCircle, Layers } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface ServicesPageProps {
@@ -27,7 +27,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ theme, onNavigate })
       id: 'start' as const,
       label: 'شروع کنیم',
       sublabel: 'طراحی سایت، تجربه کاربری و شبکه‌های اجتماعی',
-      icon: Sparkles,
+      icon: Layers,
       color: '#8b5cf6'
     },
     {
@@ -262,7 +262,7 @@ export const ServicesPage: React.FC<ServicesPageProps> = ({ theme, onNavigate })
       <CinematicSection variant="fade-up" showGlowBeam glowColor="cyan" className="space-y-12">
         <SectionEditHeader title="مراحل فرایند کاری" arrayPath="HOW_I_WORK_STEPS" />
         <div className="text-center space-y-3 max-w-2xl mx-auto">
-          <span className="text-xs font-extrabold text-[#5ce1e6] uppercase tracking-wider">فرآیند کاری شفاف</span>
+          <span className="text-xs font-extrabold text-[#5ce1e6]">فرآیند کاری شفاف</span>
           <h2 className={`text-2xl sm:text-3xl md:text-4xl font-black whitespace-nowrap ${isDark ? 'text-white' : 'text-[#1a1240]'}`}>
             مسیر ۴ مرحله‌ای همکاری
           </h2>

@@ -144,7 +144,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ theme, onNavigate, onOpe
           }`}
         >
           {activeSlide.icon}
-          <span className="text-[11px] sm:text-xs font-black tracking-wide">{activeSlide.badge}</span>
+          <span className="text-[11px] sm:text-xs font-black">{activeSlide.badge}</span>
         </div>
       </div>
 
@@ -153,7 +153,7 @@ export const HeroSlider: React.FC<HeroSliderProps> = ({ theme, onNavigate, onOpe
         {/* Main Headline */}
         <h1 
           key={`title-${activeSlide.id}`}
-          className="text-2xl sm:text-4xl lg:text-5xl font-black leading-[1.25] tracking-tight text-white transition-all duration-500 animate-fadeIn"
+          className="text-2xl sm:text-4xl lg:text-5xl font-black leading-[1.6] text-white transition-all duration-500 animate-fadeIn"
         >
           <span className={isDark ? 'text-white' : 'text-[#1a1240]'}>
             {activeSlide.titlePart1}

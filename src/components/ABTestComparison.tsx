@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Theme } from '../types';
-import { Sparkles, ArrowLeft, ArrowRight, Eye, MousePointer, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Eye, MousePointer, ShieldCheck, CheckCircle2 } from 'lucide-react';
 
 interface ABTestComparisonProps {
   theme: Theme;
@@ -16,8 +16,7 @@ export const ABTestComparison: React.FC<ABTestComparisonProps> = ({ theme }) => 
     }`}>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">
         <div>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#5ce1e6]/15 border border-[#5ce1e6]/30 text-[11px] font-bold text-[#5ce1e6] mb-2">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center px-3 py-1 rounded-full bg-[#5ce1e6]/15 border border-[#5ce1e6]/30 text-[11px] font-bold text-[#5ce1e6] mb-2">
             <span>مقایسه تصویری A/B تست تعاملی</span>
           </div>
           <h3 className={`text-xl font-black ${isDark ? 'text-white' : 'text-[#1a1240]'}`}>

@@ -16,22 +16,52 @@
 
 * {
   font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  word-break: keep-all;
-  overflow-wrap: normal;
+  word-spacing: 0.16em;
+  letter-spacing: normal !important;
   hyphens: none;
   -webkit-hyphens: none;
 }
 
-body, button, input, select, textarea, span, p, a, h1, h2, h3, h4, h5, h6, div {
+html, body {
+  word-spacing: 0.14em;
+  letter-spacing: normal;
+  line-height: 1.85;
+}
+
+body, button, input, select, textarea, span, p, a, h1, h2, h3, h4, h5, h6, div, li, label {
   font-family: 'Vazirmatn', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  word-break: keep-all;
+  word-spacing: 0.14em;
+  letter-spacing: normal;
   hyphens: none;
 }
 
+p {
+  line-height: 1.95;
+}
+
 h1, h2, h3, h4, h5, h6 {
-  word-break: keep-all;
-  overflow-wrap: normal;
+  word-spacing: 0.16em;
+  letter-spacing: normal;
+  line-height: 1.65 !important;
   text-wrap: balance;
+}
+
+h1 {
+  line-height: 1.6 !important;
+}
+
+h2 {
+  line-height: 1.55 !important;
+}
+
+h3 {
+  line-height: 1.6 !important;
+}
+
+/* Maintain normal spacing for latin/mono/numeric inputs where needed */
+.font-mono, [dir="ltr"], .dir-ltr {
+  word-spacing: normal;
+  letter-spacing: normal;
 }
 
 @layer utilities {

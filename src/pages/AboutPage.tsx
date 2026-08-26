@@ -9,7 +9,6 @@ import { PageHeader } from '../components/PageHeader';
 import { CinematicSection, CinematicStagger, CinematicItem } from '../components/motion/CinematicSection';
 import { 
   ArrowUpLeft, 
-  Sparkles, 
   Target, 
   HeartHandshake, 
   GraduationCap, 
@@ -85,8 +84,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ theme, onNavigate }) => {
 
         {/* Story & Focus */}
         <div className="lg:col-span-7 space-y-6 text-right">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gradient-to-r from-[#4c8dff]/20 to-[#8b5cf6]/20 border border-[#8b5cf6]/30 text-xs font-black text-[#8b5cf6]">
-            <Sparkles className="w-3.5 h-3.5" />
+          <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-gradient-to-r from-[#4c8dff]/20 to-[#8b5cf6]/20 border border-[#8b5cf6]/30 text-xs font-black text-[#8b5cf6]">
             <span>معرفی من</span>
           </div>
 
@@ -127,7 +125,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ theme, onNavigate }) => {
             }`}>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-black text-[#5ce1e6] uppercase tracking-wider px-3 py-1 rounded-full bg-[#5ce1e6]/10 border border-[#5ce1e6]/20">
+                  <span className="text-[11px] font-black text-[#5ce1e6] px-3 py-1 rounded-full bg-[#5ce1e6]/10 border border-[#5ce1e6]/20">
                     باور من
                   </span>
                   <IconBadge3D iconName="target" theme={theme} size="sm" glowColor="cyan" floating={false} />
@@ -149,7 +147,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ theme, onNavigate }) => {
             }`}>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-black text-[#8b5cf6] uppercase tracking-wider px-3 py-1 rounded-full bg-[#8b5cf6]/10 border border-[#8b5cf6]/20">
+                  <span className="text-[11px] font-black text-[#8b5cf6] px-3 py-1 rounded-full bg-[#8b5cf6]/10 border border-[#8b5cf6]/20">
                     روش کار من
                   </span>
                   <IconBadge3D iconName="rocket" theme={theme} size="sm" glowColor="magenta" floating={false} />
@@ -171,7 +169,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ theme, onNavigate }) => {
             }`}>
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-black text-amber-400 uppercase tracking-wider px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/20">
+                  <span className="text-[11px] font-black text-amber-400 px-3 py-1 rounded-full bg-amber-400/10 border border-amber-400/20">
                     دغدغه من
                   </span>
                   <IconBadge3D iconName="award" theme={theme} size="sm" glowColor="gold" floating={false} />
@@ -192,7 +190,7 @@ export const AboutPage: React.FC<AboutPageProps> = ({ theme, onNavigate }) => {
       <CinematicSection variant="fade-up" showGlowBeam glowColor="purple" className="space-y-12">
         <SectionEditHeader title="مسیر حرفه‌ای و تجربیات کاری" arrayPath="TIMELINE" />
         <div className="text-center space-y-3 max-w-xl mx-auto">
-          <span className="text-xs font-extrabold text-[#8b5cf6] uppercase tracking-wider">مسیر حرفه‌ای</span>
+          <span className="text-xs font-extrabold text-[#8b5cf6]">مسیر حرفه‌ای</span>
           <h2 className={`text-2xl sm:text-3xl md:text-4xl font-black ${isDark ? 'text-white' : 'text-[#1a1240]'}`}>
             پروژه‌هایی که تا اینجا روشون کار کردم
           </h2>

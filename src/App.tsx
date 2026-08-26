@@ -10,6 +10,7 @@ import { CustomCursor } from './components/CustomCursor';
 import { SplashScreen } from './components/SplashScreen';
 import { AdminFloatingBar } from './components/cms/AdminFloatingBar';
 import { AdminLoginModal } from './components/cms/AdminLoginModal';
+import { CaseStudyModal } from './components/CaseStudyModal';
 import { HomePage } from './pages/HomePage';
 import { ServicesPage } from './pages/ServicesPage';
 import { PortfolioPage } from './pages/PortfolioPage';
@@ -20,6 +21,7 @@ import { ContactPage } from './pages/ContactPage';
 import { ProjectsPage } from './pages/ProjectsPage';
 import { ProductsPage } from './pages/ProductsPage';
 import { AdminPage } from './pages/AdminPage';
+import { CustomPageView } from './pages/CustomPageView';
 
 function MainLayout() {
   const [theme] = useState<Theme>('dark');
@@ -29,7 +31,7 @@ function MainLayout() {
   const [showSplash, setShowSplash] = useState<boolean>(true);
   const [isAdminModalOpen, setIsAdminModalOpen] = useState<boolean>(false);
 
-  const { isAdmin, setIsAdmin } = useContent();
+  const { data, isAdmin, setIsAdmin } = useContent();
 
   const handleSplashComplete = useCallback(() => {
     setShowSplash(false);
@@ -61,7 +63,8 @@ function MainLayout() {
         'home', 'services', 'portfolio', 'about', 'blog', 'contact', 
         'projects', 'products', 'admin'
       ];
-      if (validPages.includes(rawHash as Page)) {
+      const customSlugs = (data.CUSTOM_PAGES || []).map((cp) => cp.slug);
+      if (validPages.includes(rawHash as Page) || customSlugs.includes(rawHash)) {
         setCurrentPage(rawHash as Page);
         if (rawHash !== 'blog') {
           setSelectedBlogPostId(null);
@@ -75,7 +78,7 @@ function MainLayout() {
     handleHashChange();
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  }, [data.CUSTOM_PAGES]);
 
   // Lock document root to dark class
   useEffect(() => {
@@ -215,6 +218,22 @@ function MainLayout() {
                 onNavigate={handleNavigate}
               />
             )}
+
+            {(() => {
+              const activeCustomPage = (data.CUSTOM_PAGES || []).find(
+                (cp) => cp.slug === currentPage || cp.id === currentPage
+              );
+              if (activeCustomPage) {
+                return (
+                  <CustomPageView
+                    customPage={activeCustomPage}
+                    theme={theme}
+                    onNavigate={handleNavigate}
+                  />
+                );
+              }
+              return null;
+            })()}
           </motion.div>
         </AnimatePresence>
       </main>
@@ -226,6 +245,14 @@ function MainLayout() {
       <AdminLoginModal
         isOpen={isAdminModalOpen}
         onClose={() => setIsAdminModalOpen(false)}
+      />
+
+      {/* Global Case Study Modal */}
+      <CaseStudyModal
+        theme={theme}
+        caseStudy={selectedCaseStudy}
+        onClose={() => setSelectedCaseStudy(null)}
+        onNavigate={handleNavigate}
       />
 
       {/* Bottom Floating Quick Action Dock */}

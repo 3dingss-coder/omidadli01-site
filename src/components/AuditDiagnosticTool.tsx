@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Theme } from '../types';
-import { Search, Sparkles, CheckCircle2, AlertTriangle, XCircle, ArrowLeft, Loader2, Gauge } from 'lucide-react';
+import { Search, CheckCircle2, AlertTriangle, XCircle, ArrowLeft, Loader2, Gauge } from 'lucide-react';
 
 interface AuditDiagnosticToolProps {
   theme: Theme;
@@ -81,10 +81,7 @@ export const AuditDiagnosticTool: React.FC<AuditDiagnosticToolProps> = ({ theme 
               <span>در حال آنالیز کدها...</span>
             </>
           ) : (
-            <>
-              <span>شروع ممیزی هوشمند</span>
-              <Sparkles className="w-4 h-4" />
-            </>
+            <span>شروع ممیزی هوشمند</span>
           )}
         </button>
       </form>

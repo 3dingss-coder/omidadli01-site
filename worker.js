@@ -136,10 +136,16 @@ export default {
 
     if (url.pathname.startsWith('/api/')) {
       const db = env.DB;
+      if (!db) {
+        return json(
+          { error: 'D1 Database binding (DB) is missing. Check wrangler.toml configuration.' },
+          { status: 500 }
+        );
+      }
       try {
         await ensureSchema(db);
       } catch (e) {
-        return json({ error: 'Database schema error', details: String(e && e.message || e) }, { status: 500 });
+        return json({ error: 'Database schema error', details: String((e && e.message) || e) }, { status: 500 });
       }
 
       try {

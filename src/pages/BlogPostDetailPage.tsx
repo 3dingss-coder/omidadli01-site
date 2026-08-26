@@ -15,7 +15,6 @@ import {
   MessageSquare, 
   ArrowLeft, 
   ArrowRight, 
-  Sparkles, 
   Lightbulb, 
   CheckCircle2, 
   Send, 
@@ -194,12 +193,11 @@ export const BlogPostDetailPage: React.FC<BlogPostDetailPageProps> = ({
 
       {/* 3. Article Hero Header */}
       <header className="max-w-4xl mx-auto text-center space-y-5">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 text-xs font-bold">
-          <Sparkles className="w-3.5 h-3.5" />
+        <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-amber-400/10 border border-amber-400/30 text-amber-400 text-xs font-bold">
           <span>{post.categoryFa}</span>
           {post.pathCategory && (
             <>
-              <span>•</span>
+              <span className="mx-2">•</span>
               <span>
                 {post.pathCategory === 'start' ? 'مسیر: شروع کنیم' : post.pathCategory === 'sell' ? 'مسیر: بهتر بفروشیم' : 'مسیر: رشد کنیم'}
               </span>
@@ -527,7 +525,6 @@ export const BlogPostDetailPage: React.FC<BlogPostDetailPageProps> = ({
         <section className="max-w-5xl mx-auto pt-12 space-y-6">
           <div className="flex items-center justify-between border-b border-white/10 pb-4">
             <h3 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-amber-400" />
               <span>مقالات مرتبط</span>
             </h3>
             <button

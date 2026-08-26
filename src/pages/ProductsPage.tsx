@@ -46,7 +46,7 @@ export const ProductsPage: React.FC<ProductsPageProps> = ({ theme = 'dark', onNa
             <EditableText path="PRODUCTS_PAGE_DATA.badge" defaultValue={pageData.badge} label="نشان هدر" />
           </span>
         </div>
-        <h1 className={`text-3xl md:text-5xl font-black tracking-tight ${isDark ? 'text-slate-100' : 'text-[#1a1240]'}`}>
+        <h1 className={`text-3xl md:text-5xl font-black ${isDark ? 'text-slate-100' : 'text-[#1a1240]'}`}>
           <EditableText path="PRODUCTS_PAGE_DATA.headline" defaultValue={pageData.headline} label="تیتر اصلی" />
         </h1>
         <p className={`text-base md:text-lg leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>

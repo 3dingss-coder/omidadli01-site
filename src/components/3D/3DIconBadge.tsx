@@ -1,5 +1,5 @@
 import React from 'react';
-import { Rocket, Target, TrendingUp, Laptop, Megaphone, Settings, Award, Layers, Search, Sparkles, BarChart2, Zap, DollarSign, Code2 } from 'lucide-react';
+import { Rocket, Target, TrendingUp, Laptop, Megaphone, Settings, Award, Layers, Search, BarChart2, Zap, DollarSign, Code2 } from 'lucide-react';
 import { Theme } from '../../types';
 
 interface IconBadgeProps {
@@ -36,7 +36,7 @@ export const IconBadge3D: React.FC<IconBadgeProps> = ({
       case 'zap': return <Zap {...iconProps} />;
       case 'dollar': return <DollarSign {...iconProps} />;
       case 'code': return <Code2 {...iconProps} />;
-      default: return <Sparkles {...iconProps} />;
+      default: return <Layers {...iconProps} />;
     }
   };
 

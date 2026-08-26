@@ -5,7 +5,7 @@ import { PageHeader } from '../components/PageHeader';
 import { EditableText } from '../components/cms/EditableText';
 import { EditableImage } from '../components/cms/EditableImage';
 import { SectionEditHeader } from '../components/cms/SectionEditHeader';
-import { Plus, Trash2, ArrowUpLeft, CheckCircle2, Sparkles, HelpCircle } from 'lucide-react';
+import { Plus, Trash2, ArrowUpLeft, CheckCircle2, HelpCircle } from 'lucide-react';
 
 interface CustomPageViewProps {
   customPage: CustomPage;
@@ -200,8 +200,7 @@ export const CustomPageView: React.FC<CustomPageViewProps> = ({
               {/* Block Type: CTA */}
               {block.type === 'cta' && (
                 <div className="text-center space-y-6 py-6 max-w-2xl mx-auto">
-                  <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#8b5cf6]/20 border border-[#8b5cf6]/30 text-xs font-bold text-[#8b5cf6]">
-                    <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                  <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-[#8b5cf6]/20 border border-[#8b5cf6]/30 text-xs font-bold text-[#8b5cf6]">
                     <span>اقدام ویژه</span>
                   </div>
                   <h3 className="text-3xl font-black text-white">

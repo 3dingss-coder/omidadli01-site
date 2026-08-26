@@ -312,7 +312,7 @@ const ContentContext = createContext<ContentContextType | undefined>(undefined);
 // missing (which is what was crashing pages like "About" with a blank screen).
 function mergeWithDefaults(parsed: any): ContentState {
   if (parsed && parsed.PERSONAL_INFO) {
-    if (!parsed.PERSONAL_INFO.title || parsed.PERSONAL_INFO.title.includes('متخصص دیزاین')) {
+    if (!parsed.PERSONAL_INFO.title || parsed.PERSONAL_INFO.title !== initialData.PERSONAL_INFO.title) {
       parsed.PERSONAL_INFO.title = initialData.PERSONAL_INFO.title;
     }
     if (!parsed.PERSONAL_INFO.avatar || parsed.PERSONAL_INFO.avatar.includes('unsplash')) {
@@ -359,7 +359,13 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
   // first paint so the page never flashes empty while the network call resolves.
   useEffect(() => {
     fetch('/api/content')
-      .then((res) => (res.ok ? res.json() : null))
+      .then((res) => {
+        const contentType = res.headers.get('content-type') || '';
+        if (res.ok && contentType.includes('application/json')) {
+          return res.json();
+        }
+        return null;
+      })
       .then((server) => {
         if (server && typeof server === 'object' && Object.keys(server).length > 0) {
           try {
@@ -502,7 +508,13 @@ export const ContentProvider: React.FC<{ children: React.ReactNode }> = ({ child
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ pin }),
     })
-      .then((res) => (res.ok ? res.json() : null))
+      .then((res) => {
+        const contentType = res.headers.get('content-type') || '';
+        if (res.ok && contentType.includes('application/json')) {
+          return res.json();
+        }
+        return null;
+      })
       .then((result) => {
         if (result && result.token) {
           localStorage.setItem('OMID_ADLI_SESSION_TOKEN', result.token);

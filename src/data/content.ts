@@ -2,7 +2,7 @@ import { ServiceItem, CaseStudy, Testimonial, BlogPost, SkillTool, TimelineMiles
 
 export const PERSONAL_INFO = {
   name: 'امید عدلی',
-  title: 'متخصص دیجیتال مارکتینگ و بهینه‌سازی نرخ تبدیل',
+  title: 'متخصص دیجیتال مارکتینگ',
   avatar: '/profile-photo-web.jpg',
   tagline: 'ساخت سیستم‌های بازاریابی داده‌محور، بهینه‌سازی Funnel و رشد قابل اندازه‌گیری شاخص‌های کلیدی (CRO, CTR, CPA)',
   bio: 'متخصص Performance Marketing & Growth با بیش از ۵ سال تجربه در طراحی، اجرا و بهینه‌سازی کمپین‌های تبلیغاتی، تحلیل داده، CRO و SEO. تمرکز اصلی من ساخت سیستم‌های بازاریابی داده‌محور است که از طریق بهینه‌سازی Funnel، پیاده‌سازی Tracking، تحلیل رفتار کاربران و بهبود مستمر عملکرد کمپین‌ها به رشد قابل اندازه‌گیری کسب‌وکار منجر می‌شوند.',
