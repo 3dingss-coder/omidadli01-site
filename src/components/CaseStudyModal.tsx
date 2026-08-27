@@ -24,6 +24,7 @@ import {
   Maximize2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { copyToClipboard } from '../utils/clipboard';
 
 interface CaseStudyModalProps {
   theme: Theme;
@@ -70,9 +71,9 @@ export const CaseStudyModal: React.FC<CaseStudyModalProps> = ({
 
   if (!caseStudy) return null;
 
-  const handleShare = () => {
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(window.location.href);
+  const handleShare = async () => {
+    const ok = await copyToClipboard(window.location.href);
+    if (ok) {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }

@@ -43,6 +43,7 @@ import {
   ListTree
 } from 'lucide-react';
 import { useContent } from '../context/ContentContext';
+import { copyToClipboard } from '../utils/clipboard';
 import { Page, CustomPage, CustomBlock } from '../types';
 import { TreeEditor } from '../components/admin/TreeEditor';
 
@@ -1586,9 +1587,9 @@ export const AdminPage: React.FC<AdminPageProps> = ({ onNavigate }) => {
 
                       <div className="flex gap-1">
                         <button
-                          onClick={() => {
-                            navigator.clipboard.writeText(media.url);
-                            showToast('لینک مستقیم تصویر کپی شد!');
+                          onClick={async () => {
+                            const ok = await copyToClipboard(media.url);
+                            showToast(ok ? 'لینک مستقیم تصویر کپی شد!' : 'کپی لینک ناموفق بود، لطفاً دستی کپی کنید.');
                           }}
                           className="w-full py-1.5 rounded-xl bg-white/10 hover:bg-amber-400 hover:text-slate-950 text-[10px] font-bold transition-all text-center"
                         >

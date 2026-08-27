@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { copyToClipboard } from '../utils/clipboard';
 import { Theme, Page, BlogPost, BlogComment } from '../types';
 import { useContent } from '../context/ContentContext';
 import { 
@@ -84,10 +85,12 @@ export const BlogPostDetailPage: React.FC<BlogPostDetailPageProps> = ({
   }, []);
 
   // Copy URL action
-  const handleCopyLink = () => {
-    navigator.clipboard.writeText(window.location.href);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+  const handleCopyLink = async () => {
+    const ok = await copyToClipboard(window.location.href);
+    if (ok) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    }
   };
 
   // Submit comment handler
