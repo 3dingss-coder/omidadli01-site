@@ -28,7 +28,7 @@ const NAV_ITEMS: NavItem[] = [
     glowHex: '#3b82f6',
   },
   {
-    id: 'products',
+    id: 'portfolio',
     label: 'نمونه‌کارها',
     icon: Package,
     gradient: 'from-[#10b981] via-[#059669] to-[#047857]',
@@ -120,8 +120,8 @@ export const QuickActionDock: React.FC<QuickActionDockProps> = ({
   // Normalize current page to one of the 5 main navigation tabs
   const activeTabId: Page = (() => {
     if (currentPage === 'blog') return 'blog';
-    if (currentPage === 'services' || currentPage === 'portfolio') return 'services';
-    if (currentPage === 'products' || currentPage === 'projects') return 'products';
+    if (currentPage === 'services') return 'services';
+    if (currentPage === 'portfolio') return 'portfolio';
     if (currentPage === 'contact') return 'contact';
     return 'home';
   })();
